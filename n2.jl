@@ -36,4 +36,4 @@ function markers!(robot)
     end
 end
 
-per_i_obr!(r)
+markers_i_obr!(r)
