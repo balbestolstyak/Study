@@ -1,0 +1,40 @@
+from collections import deque
+
+from matplotlib.pyplot import grid
+
+
+def num_islands(grid):
+    if not grid:
+        return 0
+
+
+rows, cols = len(grid), len(grid[0])
+directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+
+
+def bfs(r, c):
+    queue = deque()
+    queue.append((r, c))
+    grid[r][c] = 2
+    while queue:
+        curr_r, curr_c = queue.popleft()
+        for dr, dc in directions:
+            new_r, new_c = curr_r + dr, curr_c + dc
+            if 0 <= new_r < rows and 0 <= new_c < cols and grid[new_r][new_c] == 1:
+                grid[new_r][new_c] = 2
+                queue.append((new_r, new_c))
+    count = 0
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r][c] == 1:
+                if (r == 0 or grid[r - 1][c] != 1) and (c == 0 or grid[r][c - 1] != 1):
+                    count += 1
+                bfs(r, c)
+    return count
+
+
+grid = [[0, 1, 0, 0],
+        [0, 0, 1, 0],
+        [0, 1, 1, 0],
+        [0, 0, 0, 0]]
+print(num_islands(grid))
