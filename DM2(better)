@@ -1,0 +1,59 @@
+def bfs(matrix, x, y, visited):
+    rows, cols = len(matrix), len(matrix[0])
+
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+    queue = [(x, y)]
+    visited[x][y] = True
+    touches_border = False
+
+    while queue:
+        cx, cy = queue.pop(0)
+
+        for dx, dy in directions:
+            nx, ny = cx + dx, cy + dy
+
+            if nx < 0 or nx >= rows or ny < 0 or ny >= cols:
+                touches_border = True
+                continue
+
+            if not visited[nx][ny] and matrix[nx][ny] == 0:
+                visited[nx][ny] = True
+                queue.append((nx, ny))
+
+    return not touches_border
+
+
+def count_islands(matrix):
+    if not matrix or not matrix[0]:
+        return 0
+
+    rows, cols = len(matrix), len(matrix[0])
+    visited = [[False for _ in range(cols)] for _ in range(rows)]
+    island_count = 0
+
+    for i in range(rows):
+        for j in range(cols):
+            if matrix[i][j] == 0 and not visited[i][j]:
+                if bfs(matrix, i, j, visited):
+                    island_count += 1
+
+    return island_count
+
+
+matrix1 = [
+    [1, 1, 1, 1, 1, 1, 1, 0],
+    [1, 0, 0, 0, 0, 1, 1, 0],
+    [1, 0, 1, 0, 1, 1, 1, 0],
+    [1, 0, 0, 0, 1, 1, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 0]
+]
+
+matrix2 = [
+    [0, 0, 1, 0, 0],
+    [0, 1, 0, 1, 0],
+    [0, 1, 1, 1, 0]
+]
+
+print(count_islands(matrix1))
+print(count_islands(matrix2))
